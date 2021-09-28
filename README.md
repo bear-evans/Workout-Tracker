@@ -1,2 +1,2 @@
-# workout-tracker
-A webapp for tracking workouts to encourage consistency.
+# Workout-Tracker
+Track daily workouts to keep yourself motivated
