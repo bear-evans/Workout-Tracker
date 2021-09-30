@@ -1,21 +1,15 @@
 const router = require("express").Router();
-const { response } = require("express");
-const db = require("../models");
+const db = require("../../models");
 
 // Workout Routes
 // ---------------------------------------------------------
 // Get all workouts
-router.get("/api/workouts", async (req, res) => {
+router.get("/workouts", async (req, res) => {
   try {
-    let results = await db.Workout.find({});
-
-    results.forEach((workout) => {
-      let total = 0;
-      workout.exercises.forEach((exercise) => {
-        total = total + exercise.duration;
-      });
-
-      workout.totalDuration = total;
+    let results = await db.Workout.aggregate({
+      $addFields: {
+        totalDuration: { $sum: "$duration" },
+      },
     });
 
     res.json(results);
@@ -26,7 +20,7 @@ router.get("/api/workouts", async (req, res) => {
 
 // ---------------------------------------------------------
 // update a workout
-router.put("api/workouts/:id", async (req, res) => {
+router.put("/workouts/:id", async (req, res) => {
   try {
     let results = await db.Workout.findOneAndUpdate(
       { _id: req.params.id },
@@ -45,9 +39,21 @@ router.put("api/workouts/:id", async (req, res) => {
 
 // ---------------------------------------------------------
 // create a new workout
-router.post("/api/workouts", async (req, res) => {
+router.post("/workouts", async (req, res) => {
   try {
-    results = await db.Workout.create(req.body);
+    let results = await db.Workout.create(req.body);
+    res.json(results);
+  } catch (err) {
+    res.json(err);
+  }
+});
+
+// ---------------------------------------------------------
+// gets workouts in range
+router.get("/workouts/range", (req, res) => {
+  try {
+    let results = db.Workout.find({});
+
     res.json(results);
   } catch (err) {
     res.json(err);
