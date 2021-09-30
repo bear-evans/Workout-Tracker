@@ -43,4 +43,15 @@ router.put("api/workouts/:id", async (req, res) => {
   }
 });
 
+// ---------------------------------------------------------
+// create a new workout
+router.post("/api/workouts", async (req, res) => {
+  try {
+    results = await db.Workout.create(req.body);
+    res.json(results);
+  } catch (err) {
+    res.json(err);
+  }
+});
+
 module.exports = router;
