@@ -8,12 +8,7 @@ router.get("/workouts", async (req, res) => {
   try {
     // let results = await db.Workout.find({});
 
-    const aggregate = Workout.find({
-      $addFields: {
-        totalDuration: { $sum: [exercises.duration] },
-      },
-    });
-    aggregate.addFields({});
+    const results = await db.Workout.find({});
     res.json(results);
   } catch (err) {
     res.json(err);
